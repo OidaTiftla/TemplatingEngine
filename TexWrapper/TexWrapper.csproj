@@ -41,10 +41,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CSTexReportGenerator.cs" />
-    <Compile Include="ExtensionMethods\IOExtension.cs" />
-    <Compile Include="ExtensionMethods\ImplodeExtension.cs" />
     <Compile Include="CSScriptCompiler.cs" />
-    <Compile Include="ExtensionMethods\MaskExtension.cs" />
+    <Compile Include="ExtensionMethodes\ImplodeExtension.cs" />
+    <Compile Include="ExtensionMethodes\IOExtension.cs" />
     <Compile Include="TexWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

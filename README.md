@@ -1,5 +1,5 @@
 # LatexScriptWrapper
-Enables you to write C#-Code in your .tex-Files and compile them in your .NET-Application
+Enables you to write C#-Code in your .tex-files and compile them in your .NET-Application
 
 # Getting Started
 1. Clone this repository [https://github.com/OidaTiftla/LatexScriptWrapper.git](https://github.com/OidaTiftla/LatexScriptWrapper.git)
@@ -8,8 +8,18 @@ Enables you to write C#-Code in your .tex-Files and compile them in your .NET-Ap
     - the Configuration.xml is searched first in the directory of the .exe and then in the subdirectory Config/Configuration.xml
     - you can also specify the configuration when creating a new TexWrapper object
 
+# Classes
+The main classes are CSScriptCompiler, CSTexReportGenerator and TexWrapper
+## CSScriptCompiler
+Handles the embedded c#-Code in your .tex-file
+## CSTexReportGenerator
+Provides some extra handling, file handling, ...
+While running, it creates a .texcs-file, that contains the code that comes from the CSScriptCompiler and goes into the LaTeX-compiler.
+## TexWrapper
+Runs the LaTeX-compiler to create the .pdf-file
+
 # Example
-Souce file
+When feeding this source file
 
 		\documentclass{article}
 
@@ -25,7 +35,7 @@ Souce file
 
 		\end{document}
 
-Will create
+It will create
 
 		\documentclass{article}
 
@@ -40,3 +50,5 @@ Will create
 		\cs{1}{Test}
 
 		\end{document}
+
+What goes into the LaTex-compiler.

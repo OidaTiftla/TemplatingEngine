@@ -1,0 +1,92 @@
+﻿%\documentclass[varwidth=true, border=2pt]{standalone}
+%\documentclass{article}
+\documentclass[
+a4paper,                                               % Papierformat
+landscape,
+oneside,                                               % Einseitig
+%twoside,                                              % Zweiseitig
+12pt,                                                  % Schriftgröße
+pagesize=auto,                                         % schreibt die Papiergröße korrekt ins Ausgabedokument
+headsepline,                                           % Linie unter der Kopfzeile
+%draft=true                                            % Markiert zu lange und zu kurze Zeilen
+]{scrreprt}
+
+\usepackage{bchart}
+\usepackage{longtable}
+\usepackage{verbatim}
+\usepackage[Q=yes]{examplep}
+\usepackage{fancyvrb}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{textcomp}
+
+% switching between demo modus and c#
+\newcommand{\cs}[2]{#2}
+%## print @"\renewcommand{\cs}[2]{#1}"; ##%
+
+%\allowdisplaybreaks
+\geometry{a4paper, landscape, left=20mm, right=20mm, top=22mm, bottom=25mm} 
+
+\begin{document}
+\textbf{}\hfill{\Huge Test} \hfill \cs{\verb|## print DateTime.Now.ToShortDateString(); ##|}{14.08.2015}
+
+%## print Tex.Escape("äöü-_'!\"§$%&/()=?^<>{[]}\\~"); ##%
+\cs{{## print 1; ##}}{Test}
+
+    \begin{bchart}[step=2,max=10]
+		%####%
+		%##
+		##%
+		%## print o.Value; ##%
+		%## yield print o.Value2; ##%
+		%## if (o.x) { ##%
+			\bcbar{3.4}
+				\smallskip
+		%## } else if (o.y) { ##%
+			\bcbar{5.6}
+				\medskip
+		%## } else if (o.z) { ##%
+			\bcbar{7.2}
+				\bigskip
+		%## } else { ##%
+			\bcbar{9.9}
+		%## } ##%
+    \end{bchart}
+
+
+\begin{center}
+\small
+\begin{longtable}{\cs{\verb|## print EnumerableExtension.Implode(Enumerable.Repeat("c", columns), "|"); ##|}{c|c|c}}
+	\cs{
+	\begin{comment}##
+	foreach (var h in o.Headers) {
+		if (h == "ID" || h == "KFZ") {
+			print (first ? "" : @" & ") + @"\textbf{" + Tex.Escape(h) + @"}";
+		} else {
+			print (first ? "" : @" & ") + @"\rotatebox{90}{\textbf{" + Tex.Escape(h) + @"}}";
+		}
+		first = false;
+	}
+	##\end{comment}
+	}{\textbf{ID} & \textbf{KFZ} & \rotatebox{90}{\textbf{Fahrzeugschein}}}\\
+	\hline
+	\endhead
+	\cs{
+	\begin{comment}##
+	foreach (var e in o.Entries) {
+		first = true;
+		foreach (var v in e) {
+			print (first ? "" : @" & ") + Tex.Escape(v);
+			first = false;
+		}
+		print @"\\\hline
+	";
+	}
+	##\end{comment}
+	}{2 & TEST-0815\_2 & X\\\hline
+	3 & Test & X\\\hline}
+\end{longtable}
+\end{center}
+
+\end{document}

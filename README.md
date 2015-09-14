@@ -1,6 +1,8 @@
 # LatexScriptWrapper
 Enables you to write C#-Code in your .tex-files and compile them in your .NET-Application
 
+If you have any improvements, ideas, ... please let me know ;-)
+
 # Getting Started
 1. Clone this repository [https://github.com/OidaTiftla/LatexScriptWrapper.git](https://github.com/OidaTiftla/LatexScriptWrapper.git)
 2. Download and install some LaTeX compiler. For example [MiKTeX](http://miktex.org/download) or the [portable version](http://miktex.org/portable)

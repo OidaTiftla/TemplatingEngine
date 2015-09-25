@@ -13,7 +13,7 @@ If you have any improvements, ideas, ... please let me know ;-)
 # Classes
 The main classes are CSScriptCompiler, CSTexReportGenerator and TexWrapper
 ## CSScriptCompiler
-Handles the embedded c#-Code in your .tex-file
+Handles the embedded C#-Code in your .tex-file
 ## CSTexReportGenerator
 Provides some extra handling, file handling, ...
 While running, it creates a .texcs-file, that contains the code that comes from the CSScriptCompiler and goes into the LaTeX-compiler.
@@ -53,4 +53,4 @@ It will create
 
 		\end{document}
 
-What goes into the LaTex-compiler.
+What goes into the LaTeX-compiler.

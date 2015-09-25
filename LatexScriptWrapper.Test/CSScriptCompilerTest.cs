@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 
-namespace TexWrapper.Test
+namespace LatexScriptWrapper.Test
 {
     [TestClass]
     public class CSScriptCompilerTest

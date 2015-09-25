@@ -7,8 +7,8 @@
     <ProjectGuid>{BD1A303E-3243-4423-AEBF-92623E302A71}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TexWrapper</RootNamespace>
-    <AssemblyName>TexWrapper</AssemblyName>
+    <RootNamespace>LatexScriptWrapper</RootNamespace>
+    <AssemblyName>LatexScriptWrapper</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

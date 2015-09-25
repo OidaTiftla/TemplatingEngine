@@ -21,10 +21,10 @@
 !MikTeX/*/bin/
 
 # Reports Tex Compile
-/TexWrapper/TestFile.aux
-/TexWrapper/TestFile.pdf
-/TexWrapper/TestFile.synctex.gz
-/TexWrapper/TestFile.texcs
+/LatexScriptWrapper/TestFile.aux
+/LatexScriptWrapper/TestFile.pdf
+/LatexScriptWrapper/TestFile.synctex.gz
+/LatexScriptWrapper/TestFile.texcs
 
 # modules_repo
 /modules_repo/

@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 
-namespace TexWrapper
+namespace LatexScriptWrapper
 {
     public class TexConfig
     {

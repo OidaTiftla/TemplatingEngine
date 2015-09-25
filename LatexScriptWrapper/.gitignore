@@ -154,24 +154,3 @@ $RECYCLE.BIN/
 
 # Mac desktop service store files
 .DS_Store
-
-# =========================
-# My ignores
-# =========================
-
-# MikTeX
-#/MikTeX/*
-!MikTeX/*
-!MikTeX/*/*
-!MikTeX/*/
-!MikTeX/*/*/
-!MikTeX/*/bin/
-
-# Reports Tex Compile
-/TexWrapper/TestFile.aux
-/TexWrapper/TestFile.pdf
-/TexWrapper/TestFile.synctex.gz
-/TexWrapper/TestFile.texcs
-
-# modules_repo
-/modules_repo/

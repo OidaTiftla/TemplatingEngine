@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TexWrapper", "TexWrapper\TexWrapper.csproj", "{BD1A303E-3243-4423-AEBF-92623E302A71}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LatexScriptWrapper", "LatexScriptWrapper\LatexScriptWrapper.csproj", "{BD1A303E-3243-4423-AEBF-92623E302A71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TexWrapper.Test", "TexWrapper.Test\TexWrapper.Test.csproj", "{F13CEC4E-FAB8-4050-9D11-9339E982D813}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LatexScriptWrapper.Test", "LatexScriptWrapper.Test\LatexScriptWrapper.Test.csproj", "{F13CEC4E-FAB8-4050-9D11-9339E982D813}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

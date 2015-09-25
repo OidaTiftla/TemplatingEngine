@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using ExtensionMethods;
 
-namespace TexWrapper
+namespace LatexScriptWrapper
 {
     public interface IScript
     {

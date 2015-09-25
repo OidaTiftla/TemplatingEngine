@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LatexScriptWrapper", "LatexScriptWrapper\LatexScriptWrapper.csproj", "{BD1A303E-3243-4423-AEBF-92623E302A71}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LatexScriptWrapper.Test", "LatexScriptWrapper.Test\LatexScriptWrapper.Test.csproj", "{F13CEC4E-FAB8-4050-9D11-9339E982D813}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LatexScriptWrapper.Sample", "LatexScriptWrapper.Sample\LatexScriptWrapper.Sample.csproj", "{951D50C8-F794-4265-99B1-E21BCC785B4C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{F13CEC4E-FAB8-4050-9D11-9339E982D813}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F13CEC4E-FAB8-4050-9D11-9339E982D813}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F13CEC4E-FAB8-4050-9D11-9339E982D813}.Release|Any CPU.Build.0 = Release|Any CPU
+		{951D50C8-F794-4265-99B1-E21BCC785B4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{951D50C8-F794-4265-99B1-E21BCC785B4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{951D50C8-F794-4265-99B1-E21BCC785B4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{951D50C8-F794-4265-99B1-E21BCC785B4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

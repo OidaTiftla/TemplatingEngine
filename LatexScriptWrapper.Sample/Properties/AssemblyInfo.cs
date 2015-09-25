@@ -1,16 +1,15 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("LatexScriptWrapper")]
+[assembly: AssemblyTitle("LatexScriptWrapper.Sample")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("LatexScriptWrapper")]
+[assembly: AssemblyProduct("LatexScriptWrapper.Sample")]
 [assembly: AssemblyCopyright("Copyright © Christoph Stephan 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -21,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("19681647-fb89-4245-ac67-bb484437d8e8")]
+[assembly: Guid("dd69e518-c891-4f8f-9ec0-94a1394ec029")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -33,8 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-
-// That VB.Net can use this DLL
-[assembly: CLSCompliant(true)]

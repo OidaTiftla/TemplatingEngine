@@ -4,16 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BD1A303E-3243-4423-AEBF-92623E302A71}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{951D50C8-F794-4265-99B1-E21BCC785B4C}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LatexScriptWrapper</RootNamespace>
-    <AssemblyName>LatexScriptWrapper</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <RootNamespace>LatexScriptWrapper.Sample</RootNamespace>
+    <AssemblyName>LatexScriptWrapper.Sample</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -40,18 +41,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CSTexReportGenerator.cs" />
-    <Compile Include="CSScriptCompiler.cs" />
-    <Compile Include="ExtensionMethods\AnonymousTypeHelper.cs" />
-    <Compile Include="ExtensionMethods\ImplodeExtension.cs" />
-    <Compile Include="ExtensionMethods\IOExtension.cs" />
-    <Compile Include="TexWrapper.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Config\Configuration.xml">
+    <None Include="App.config" />
+    <Content Include="TestFile.tex">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LatexScriptWrapper\LatexScriptWrapper.csproj">
+      <Project>{bd1a303e-3243-4423-aebf-92623e302a71}</Project>
+      <Name>LatexScriptWrapper</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

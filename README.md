@@ -21,6 +21,7 @@ While running, it creates a .texcs-file, that contains the code that comes from 
 Runs the LaTeX-compiler to create the .pdf-file
 
 # Example
+## Sample LaTeX-file
 When feeding this source file
 
 		\documentclass{article}
@@ -33,7 +34,7 @@ When feeding this source file
 		\textbf{}\hfill{\Huge Test} \hfill \cs{\verb|## print DateTime.Now.ToShortDateString(); ##|}{14.09.2015}
 
 		%## print Tex.Escape("äöü-_'!\"§$%&/()=?^<>{[]}\\~"); ##%
-		\cs{{## print 1; ##}}{Test}
+		\cs{{## print o.Value; ##}}{Test}
 
 		\end{document}
 
@@ -49,8 +50,44 @@ It will create
 		\textbf{}\hfill{\Huge Test} \hfill \cs{14/09/2015}{14.09.2015}
 
 		äöü-\_'!"'\S\$\%\&/()=?\hat{\text{\ }}{\textless}{\textgreater}\{[]\}{\texttt{\char`\\}{\textasciitilde}
-		\cs{1}{Test}
+		\cs{25}{Test}
 
 		\end{document}
 
 What goes into the LaTeX-compiler.
+
+## Sample C#-code
+Here is a sample script:
+
+		// Create the RepotGenerator
+		// Here you can pass a Configuration, otherwise
+		// CSTexReportGenerator searches Configuration.xml
+		// in the current directory and if it is not there
+		// he searches it in ./Config/
+		var generator = new CSTexReportGenerator();
+
+		// Create an object, that you can use in your LaTeX
+		var o = new
+		{
+			Value = 25,
+			x = false,
+			y = true,
+			z = false,
+			Headers = new string[] { "First", "Second", "Third", "Fourth" },
+			Entries = new[] {
+				new[] { "11", "12", "13", "14" },
+				new[] { "21", "22", "23", "24" },
+				new[] { "31", "32", "33", "34" },
+				new[] { "41", "42", "43", "44" },
+				new[] { "51", "52", "53", "54" },
+				new[] { "61", "62", "63", "64" },
+			},
+		};
+
+		// Create the PDF
+		var src = new FileInfo("TestFile.tex");
+		var dest = new FileInfo("TestFile.pdf");
+		generator.Create(src, o, dest);
+
+		// Show the PDF
+		Process.Start(dest.FullName);

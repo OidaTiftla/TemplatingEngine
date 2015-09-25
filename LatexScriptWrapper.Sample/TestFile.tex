@@ -1,4 +1,4 @@
-﻿%\documentclass[varwidth=true, border=2pt]{standalone}
+%\documentclass[varwidth=true, border=2pt]{standalone}
 %\documentclass{article}
 \documentclass[
 a4paper,                                               % Papierformat
@@ -31,15 +31,14 @@ headsepline,                                           % Linie unter der Kopfzei
 \begin{document}
 \textbf{}\hfill{\Huge Test} \hfill \cs{\verb|## print DateTime.Now.ToShortDateString(); ##|}{14.08.2015}
 
+Escape special Characters:\\
 %## print Tex.Escape("äöü-_'!\"§$%&/()=?^<>{[]}\\~"); ##%
+
+This is how to make it possible to use a regular Tex-Editor like TeXstudio and have some demo data.\\
 \cs{{## print 1; ##}}{Test}
 
     \begin{bchart}[step=2,max=10]
-		%####%
-		%##
-		##%
 		%## print o.Value; ##%
-		%## yield print o.Value2; ##%
 		%## if (o.x) { ##%
 			\bcbar{3.4}
 				\smallskip
@@ -57,19 +56,17 @@ headsepline,                                           % Linie unter der Kopfzei
 
 \begin{center}
 \small
-\begin{longtable}{\cs{\verb|## print EnumerableExtension.Implode(Enumerable.Repeat("c", columns), "|"); ##|}{c|c|c}}
+%## var columns = o.Headers.Length; ##%
+%## var first = true; ##%
+\begin{longtable}{\cs{\verb$## print EnumerableExtension.Implode(Enumerable.Repeat("c", columns), "|"); ##$}{c|c|c}}
 	\cs{
 	\begin{comment}##
 	foreach (var h in o.Headers) {
-		if (h == "ID" || h == "KFZ") {
-			print (first ? "" : @" & ") + @"\textbf{" + Tex.Escape(h) + @"}";
-		} else {
-			print (first ? "" : @" & ") + @"\rotatebox{90}{\textbf{" + Tex.Escape(h) + @"}}";
-		}
+		print (first ? "" : @" & ") + @"\textbf{" + Tex.Escape(h) + @"}";
 		first = false;
 	}
 	##\end{comment}
-	}{\textbf{ID} & \textbf{KFZ} & \rotatebox{90}{\textbf{Fahrzeugschein}}}\\
+	}{\textbf{column1} & \textbf{column2} & \textbf{column3}}\\
 	\hline
 	\endhead
 	\cs{
@@ -84,8 +81,8 @@ headsepline,                                           % Linie unter der Kopfzei
 	";
 	}
 	##\end{comment}
-	}{2 & TEST-0815\_2 & X\\\hline
-	3 & Test & X\\\hline}
+	}{a & b & c\\\hline
+	d & e & f\\\hline}
 \end{longtable}
 \end{center}
 

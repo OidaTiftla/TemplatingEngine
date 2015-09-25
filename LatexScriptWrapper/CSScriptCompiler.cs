@@ -119,7 +119,6 @@ namespace LatexScriptWrapper
         {
             var csPartsRegex = new Regex(this.EscapeSequenzes.Implode("|", "(", ")",
                 x => @"(?<=" + x.BeginRegex + @").*?(?=" + x.EndRegex + @")"), RegexOptions.Singleline);
-            //var printRegex = new Regex(@"\sprint\s", RegexOptions.Singleline);
             var printRegex = new Regex(@"(?<=\s+)print\s+(?<retval>.*?)(?=;)", RegexOptions.Singleline);
             var contentPartsRegex = new Regex(@"(^|"
                 + this.EscapeSequenzes.Implode(")|(", "(", ")", x => x.EndRegex)
@@ -127,8 +126,6 @@ namespace LatexScriptWrapper
                 + this.EscapeSequenzes.Implode(")|(", "(", ")", x => x.BeginRegex) + @"|$)", RegexOptions.Singleline);
 
             contents.Clear();
-            //tex = csPartsRegex.Replace(tex, m =>
-            //    printRegex.Replace(m.ToString(), " yield return "));
             tex = csPartsRegex.Replace(tex, m =>
                 printRegex.Replace(m.ToString(), mm => "Print(" + mm.Groups["retval"].ToString() + ")"));
             return contentPartsRegex.Replace(tex, m =>
@@ -152,7 +149,7 @@ namespace LatexScriptWrapper
         private IContentsScript createScript(string code, string func = null)
         {
             string classcode = this.Usings.Implode("\n", "", "", x => "using " + x + ";") + @"
-            
+
                 namespace UserFunctions
                 {                
                     public class UserFunction : " + typeof(IContentsScript).FullName + @"
@@ -172,7 +169,7 @@ namespace LatexScriptWrapper
                         {
                             this.Outputs.Clear();
                             var sb = new StringBuilder();
-                            this.run(o);
+                            this.run(" + typeof(AnonymousTypeHelper).FullName + @".ToExpandoObjectIfNecessary(o));
                             foreach (var s in this.Outputs)
                                 sb.Append(s);
                             return sb.ToString();
@@ -203,7 +200,8 @@ namespace LatexScriptWrapper
             parameters.TempFiles = new TempFileCollection(Environment.GetEnvironmentVariable("TEMP"), true);
 
             //Add the required assemblies
-            parameters.ReferencedAssemblies.Add(typeof(IContentsScript).Assembly.Location);
+            AddIfNotExists(parameters, typeof(IContentsScript).Assembly.Location);
+            AddIfNotExists(parameters, typeof(AnonymousTypeHelper).Assembly.Location);
             foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
             {
                 try
@@ -212,8 +210,7 @@ namespace LatexScriptWrapper
                         continue;
                     //if (asm.Location.Contains("Microsoft.Xna") || asm.Location.Contains("Gibbo.Library")
                     //    || asm.Location.Contains("System"))
-                    if (!parameters.ReferencedAssemblies.Contains(asm.Location))
-                        parameters.ReferencedAssemblies.Add(asm.Location);
+                    AddIfNotExists(parameters, asm.Location);
                 }
                 catch { }
             }
@@ -246,6 +243,13 @@ namespace LatexScriptWrapper
 
             Type binaryFunction = results.CompiledAssembly.GetType("UserFunctions.UserFunction");
             return binaryFunction.GetConstructor(new Type[0]).Invoke(new object[0]) as IContentsScript;
+        }
+
+        private static void AddIfNotExists(CompilerParameters parameters, string location)
+        {
+            if (!parameters.ReferencedAssemblies.Contains(location))
+                parameters.ReferencedAssemblies.Add(location);
+
         }
     }
 }

@@ -11,14 +11,22 @@ If you have any improvements, ideas, ... please let me know ;-)
     * you can also specify the configuration when creating a new TexWrapper object
 
 # Classes
-The main classes are CSScriptCompiler, CSTexReportGenerator and TexWrapper
+The main classes are CSScriptCompiler, TexWrapper and CSTexReportGenerator
 ## CSScriptCompiler
-Handles the embedded C#-Code in your .tex-file
-## CSTexReportGenerator
-Provides some extra handling, file handling, ...
-While running, it creates a .texcs-file, that contains the code that comes from the CSScriptCompiler and goes into the LaTeX-compiler.
+Compiles the .tex-file with the embedded C#-Code in it to an IScript. This script you can run and get a string back, that contains the processed input-file. The run-method acceptes a dynamic object. With this object you can pass values to the script.
 ## TexWrapper
-Runs the LaTeX-compiler to create the .pdf-file
+It holds the configuration for the LaTeX-compiler and runs it to create the .pdf-file
+## CSTexReportGenerator
+Handles some stuff around the two classes CSScriptCompiler and TexWrapper, to make world a bit easier.
+While running, it creates a .texcs-file, that contains the output from the CSScriptCompiler. This goes into the LaTeX-compiler (TexWrapper).
+
+# Escape-Sequences
+There are some standard escape-sequences CSTexReportGenerator creates for you. Offcoures you can add your own ones ;)
+
+		%## Here you can put your C#-Code ##%
+		\verb|## Here you can put your C#-Code ##|
+		\verb$## Here you can put your C#-Code ##$
+		\begin{comment}## Here you can put your C#-Code ##\end{comment}
 
 # Example
 ## Sample LaTeX-file

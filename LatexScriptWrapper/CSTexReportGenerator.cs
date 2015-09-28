@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace TexWrapper
+namespace LatexScriptWrapper
 {
     public interface IReportGenerator
     {
@@ -65,6 +65,7 @@ namespace TexWrapper
             this.compiler_.AddEscapeSequenze(@"%##", @"##%");
             this.compiler_.AddEscapeSequenze(@"\verb|##", @"##|");
             this.compiler_.AddEscapeSequenze(@"\verb$##", @"##$");
+            // Regex does not work pretty good if you want to use groups in Regex. At the moment its not necessary
             //this.compiler_.AddEscapeSequenzeRegex(@"\\verb.\#\#", @"\#\#.");
             //this.compiler_.AddEscapeSequenzeRegex(@"\\verb(?<k84>.)\#\#", @"\#\#\k<k84>");
             this.compiler_.AddEscapeSequenze(@"\begin{comment}##", @"##\end{comment}");

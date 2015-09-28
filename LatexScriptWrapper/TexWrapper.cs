@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 
-namespace TexWrapper
+namespace LatexScriptWrapper
 {
     public class TexConfig
     {
@@ -166,7 +166,7 @@ namespace TexWrapper
                     //var pdfFile = texFile.Directory.EnumerateFiles(texFile.NameWithoutExtension() + ".pdf").FirstOrDefault();
                     if (!File.Exists(pdfFile.FullName))
                         throw new TexCompilationException("Tex-Command was successfully executed but there is no output-PDF file found");
-                    if (destPdfFile != null)
+                    if (destPdfFile != null && destPdfFile.FullName != pdfFile.FullName)
                     {
                         if (File.Exists(destPdfFile.FullName))
                             destPdfFile.Delete();

@@ -59,9 +59,13 @@ namespace LatexScriptWrapper
         public FileInfo Source { get { return this.source_; } set { this.source_ = value; this.script_ = null; } }
         public TexWrapper TexWrapper { get; private set; }
 
-        public CSTexReportGenerator()
+        public CSTexReportGenerator() : this(null) { }
+        public CSTexReportGenerator(FileInfo configFile)
         {
-            this.TexWrapper = new TexWrapper();
+            if (configFile == null)
+                this.TexWrapper = new TexWrapper();
+            else
+                this.TexWrapper = new TexWrapper(configFile);
             this.compiler_.AddEscapeSequenze(@"%##", @"##%");
             this.compiler_.AddEscapeSequenze(@"\verb|##", @"##|");
             this.compiler_.AddEscapeSequenze(@"\verb$##", @"##$");
@@ -71,7 +75,6 @@ namespace LatexScriptWrapper
             this.compiler_.AddEscapeSequenze(@"\begin{comment}##", @"##\end{comment}");
             this.compiler_.FunctionCode = texEscapeFunc;
         }
-        public CSTexReportGenerator(FileInfo source) : this() { this.Source = source; }
 
         public void Create(dynamic o, FileInfo destination)
         {

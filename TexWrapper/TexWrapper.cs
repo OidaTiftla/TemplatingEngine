@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml;
 
 namespace TexWrapper
@@ -146,6 +147,7 @@ namespace TexWrapper
         private void compile(FileInfo texFile, FileInfo destPdfFile)
         {
             string cmdLine = null, workingDir = null;
+            var stdOutput = new StringBuilder();
             var pdfFile = new FileInfo(Path.Combine(texFile.Directory.FullName, texFile.NameWithoutExtension() + ".pdf"));
             var logFile = new FileInfo(Path.Combine(texFile.Directory.FullName, texFile.NameWithoutExtension() + ".log"));
             try
@@ -153,12 +155,29 @@ namespace TexWrapper
                 if (File.Exists(pdfFile.FullName))
                     pdfFile.Delete();
                 var process = this.Configuration.CreateProcess(texFile);
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.RedirectStandardError = true;
                 workingDir = process.StartInfo.WorkingDirectory = texFile.Directory.FullName;
                 cmdLine = process.StartInfo.FileName + " " + process.StartInfo.Arguments;
+                // set up startinfo to redirect outputs
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardError = true;
+                process.StartInfo.UseShellExecute = false;
+                process.EnableRaisingEvents = true;
+                process.OutputDataReceived += (sender, e) =>
+                {
+                    stdOutput.AppendLine(e.Data);
+                };
+                process.ErrorDataReceived += (sender, e) =>
+                {
+                    stdOutput.AppendLine("STDERR: " + e.Data);
+                };
+                // start it
                 process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
                 process.WaitForExit();
+                process.CancelOutputRead();
+                process.CancelErrorRead();
+                // verify the result
                 if (process.ExitCode == 0 || File.Exists(pdfFile.FullName))
                 {
                     if (process.ExitCode == 0)
@@ -177,18 +196,19 @@ namespace TexWrapper
                 }
                 else
                 {
+                    // some thing went wrong ...
+
+                    // get logging
                     var log = "";
+                    log += "Standard output:\n" + stdOutput.ToString();
+                    log += "\n\n\n\n";
+
                     if (File.Exists(logFile.FullName))
                     {
                         using (var reader = new StreamReader(logFile.FullName))
-                            log = reader.ReadToEnd();
+                            log += reader.ReadToEnd();
                     }
-                    else
-                    {
-                        log += "Standard output:\n" + process.StandardOutput.ReadToEnd();
-                        log += "\n\n\n\n";
-                        log += "Standard error:\n" + process.StandardError.ReadToEnd();
-                    }
+
                     Debug.WriteLine(
                         "'" + cmdLine + "' with working directory '"
                         + workingDir + "' exited with error: "

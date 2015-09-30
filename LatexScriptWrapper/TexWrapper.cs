@@ -153,6 +153,8 @@ namespace LatexScriptWrapper
                 if (File.Exists(pdfFile.FullName))
                     pdfFile.Delete();
                 var process = this.Configuration.CreateProcess(texFile);
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardError = true;
                 workingDir = process.StartInfo.WorkingDirectory = texFile.Directory.FullName;
                 cmdLine = process.StartInfo.FileName + " " + process.StartInfo.Arguments;
                 process.Start();
@@ -176,9 +178,17 @@ namespace LatexScriptWrapper
                 else
                 {
                     var log = "";
-                    using (var reader = new StreamReader(logFile.FullName))
-                        log = reader.ReadToEnd();
-                    //var log = process.StandardOutput.ReadToEnd();
+                    if (File.Exists(logFile.FullName))
+                    {
+                        using (var reader = new StreamReader(logFile.FullName))
+                            log = reader.ReadToEnd();
+                    }
+                    else
+                    {
+                        log += "Standard output:\n" + process.StandardOutput.ReadToEnd();
+                        log += "\n\n\n\n";
+                        log += "Standard error:\n" + process.StandardError.ReadToEnd();
+                    }
                     Debug.WriteLine(
                         "'" + cmdLine + "' with working directory '"
                         + workingDir + "' exited with error: "

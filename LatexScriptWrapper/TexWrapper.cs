@@ -164,11 +164,17 @@ namespace LatexScriptWrapper
                 process.EnableRaisingEvents = true;
                 process.OutputDataReceived += (sender, e) =>
                 {
-                    stdOutput.AppendLine(e.Data);
+                    lock (stdOutput)
+                    {
+                        stdOutput.AppendLine(e.Data);
+                    }
                 };
                 process.ErrorDataReceived += (sender, e) =>
                 {
-                    stdOutput.AppendLine("STDERR: " + e.Data);
+                    lock (stdOutput)
+                    {
+                        stdOutput.AppendLine("STDERR: " + e.Data);
+                    }
                 };
                 // start it
                 process.Start();

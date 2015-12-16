@@ -20,6 +20,9 @@ namespace LatexScriptWrapper
                 public static string Escape(object o) { return Escape(o.ToString()); }
                 public static string Escape(string text)
                 {
+                    if (text == null)
+                        return """";
+                    
                     var sb = new StringBuilder();
                     foreach (var c in text)
                     {

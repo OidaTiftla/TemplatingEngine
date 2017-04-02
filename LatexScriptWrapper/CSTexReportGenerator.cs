@@ -45,6 +45,7 @@ namespace LatexScriptWrapper
                         case '%': sb.Append(@""\%""); break;
                         case ' ': sb.Append(@""\ ""); break;
                         case '""': sb.Append(@""""""'""); break;
+                        case ',': sb.Append(@""{,}""); break;
                         default: sb.Append(c); break;
                         }
 //                        if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'))

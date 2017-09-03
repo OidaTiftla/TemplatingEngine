@@ -1,19 +1,14 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
 
-namespace LatexScriptWrapper
-{
-    public interface IReportGenerator
-    {
+namespace LatexScriptWrapper {
+    public interface IReportGenerator {
         void Create(dynamic o, FileInfo destination);
         void Create(FileInfo source, dynamic o, FileInfo destination);
     }
 
-    public class CSTexReportGenerator : IReportGenerator
-    {
+    public class CSTexReportGenerator : IReportGenerator {
         private static string texEscapeFunc = @"
             class Tex
             {
@@ -64,8 +59,7 @@ namespace LatexScriptWrapper
         public TexWrapper TexWrapper { get; private set; }
 
         public CSTexReportGenerator() : this(null) { }
-        public CSTexReportGenerator(FileInfo configFile)
-        {
+        public CSTexReportGenerator(FileInfo configFile) {
             if (configFile == null)
                 this.TexWrapper = new TexWrapper();
             else
@@ -80,8 +74,7 @@ namespace LatexScriptWrapper
             this.compiler_.FunctionCode = texEscapeFunc;
         }
 
-        public void Create(dynamic o, FileInfo destination)
-        {
+        public void Create(dynamic o, FileInfo destination) {
             if (this.Source == null)
                 throw new InvalidOperationException("You must first specify a source.");
             if (this.script_ == null)
@@ -94,8 +87,7 @@ namespace LatexScriptWrapper
             this.TexWrapper.Compile(texcs, destination); // BugFix: Always compile twice
         }
 
-        public void Create(FileInfo source, dynamic o, FileInfo destination)
-        {
+        public void Create(FileInfo source, dynamic o, FileInfo destination) {
             IScript script;
 #if DEBUG
             var swTotal = new Stopwatch();

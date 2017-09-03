@@ -7,10 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 
-namespace LatexScriptWrapper
-{
-    public class TexConfig
-    {
+namespace LatexScriptWrapper {
+    public class TexConfig {
         #region properties
         public string Command { get; set; }
         public List<string> Arguments { get; private set; }
@@ -22,18 +20,15 @@ namespace LatexScriptWrapper
         #endregion
 
         #region load
-        public bool Load(FileInfo file)
-        {
+        public bool Load(FileInfo file) {
             this.Command = null;
             this.Arguments.Clear();
-            try
-            {
+            try {
                 XmlDocument document = new XmlDocument();
                 document.Load(file.FullName);
                 XmlElement rootElement = document.DocumentElement;
                 XmlNodeList nodes = rootElement.ChildNodes;
-                foreach (XmlNode node in nodes)
-                {
+                foreach (XmlNode node in nodes) {
                     if (node.Name.Equals("command"))
                         this.Command = node.InnerText;
                     else if (node.Name.Equals("arg")
@@ -42,9 +37,7 @@ namespace LatexScriptWrapper
                         this.Arguments.Add(node.Attributes.Item(0).Value);
                 }
                 return true;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Debug.WriteLine(ex.Message);
                 return false;
             }
@@ -52,8 +45,7 @@ namespace LatexScriptWrapper
         #endregion
 
         #region create process
-        public Process CreateProcess(FileInfo texFile)
-        {
+        public Process CreateProcess(FileInfo texFile) {
             Process process = new Process();
             process.StartInfo.FileName = this.Command;
             process.StartInfo.Arguments = this.Arguments.Concat(new string[] { "\"" + texFile.FullName + "\"" }).Implode(" ");
@@ -64,28 +56,24 @@ namespace LatexScriptWrapper
         #endregion
 
         #region ToString
-        public override string ToString()
-        {
+        public override string ToString() {
             return this.Command + " " + this.Arguments.Implode(" ");
         }
         #endregion
     }
 
-    public class TexWrapper
-    {
+    public class TexWrapper {
         #region properties
         public TexConfig Configuration { get; set; }
         #endregion
 
         #region constructor
-        public TexWrapper()
-        {
+        public TexWrapper() {
             this.Configuration = new TexConfig();
             var config = new FileInfo("Configuration.xml");
             if (config.Exists)
                 this.Configuration.Load(config);
-            else
-            {
+            else {
                 config = new FileInfo("Config\\Configuration.xml");
                 if (config.Exists)
                     this.Configuration.Load(config);
@@ -96,21 +84,16 @@ namespace LatexScriptWrapper
         #endregion
 
         #region compile
-        public void Compile(string tex, FileInfo destPdfFile)
-        {
-            try
-            {
+        public void Compile(string tex, FileInfo destPdfFile) {
+            try {
                 var tmpDir = IOExtension.CreateTempDirectory();
                 var texTmpFile = new FileInfo(Path.Combine(tmpDir.FullName, "temp.tex"));
-                using (var writer = new StreamWriter(texTmpFile.FullName))
-                {
+                using (var writer = new StreamWriter(texTmpFile.FullName)) {
                     writer.Write(tex);
                 }
                 this.compile(texTmpFile, destPdfFile);
                 tmpDir.Delete(true);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 if (ex is TexCompilationException)
                     throw;
                 Debug.WriteLine(ex.Message);
@@ -119,23 +102,18 @@ namespace LatexScriptWrapper
             }
         }
 
-        public void Compile(FileInfo texFile, FileInfo destPdfFile)
-        {
+        public void Compile(FileInfo texFile, FileInfo destPdfFile) {
             this.compile(texFile, destPdfFile);
         }
 
-        public void CompileInTemporaryDirectory(FileInfo texFile, FileInfo destPdfFile)
-        {
-            try
-            {
+        public void CompileInTemporaryDirectory(FileInfo texFile, FileInfo destPdfFile) {
+            try {
                 var tmpDir = IOExtension.CreateTempDirectory();
                 var texTmpFile = new FileInfo(Path.Combine(tmpDir.FullName, texFile.Name));
                 texFile.CopyTo(texTmpFile.FullName);
                 this.compile(texTmpFile, destPdfFile);
                 tmpDir.Delete(true);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 if (ex is TexCompilationException)
                     throw;
                 Debug.WriteLine(ex.Message);
@@ -144,14 +122,12 @@ namespace LatexScriptWrapper
             }
         }
 
-        private void compile(FileInfo texFile, FileInfo destPdfFile)
-        {
+        private void compile(FileInfo texFile, FileInfo destPdfFile) {
             string cmdLine = null, workingDir = null;
             var stdOutput = new StringBuilder();
             var pdfFile = new FileInfo(Path.Combine(texFile.Directory.FullName, texFile.NameWithoutExtension() + ".pdf"));
             var logFile = new FileInfo(Path.Combine(texFile.Directory.FullName, texFile.NameWithoutExtension() + ".log"));
-            try
-            {
+            try {
                 if (File.Exists(pdfFile.FullName))
                     pdfFile.Delete();
                 var process = this.Configuration.CreateProcess(texFile);
@@ -162,17 +138,13 @@ namespace LatexScriptWrapper
                 process.StartInfo.RedirectStandardError = true;
                 process.StartInfo.UseShellExecute = false;
                 process.EnableRaisingEvents = true;
-                process.OutputDataReceived += (sender, e) =>
-                {
-                    lock (stdOutput)
-                    {
+                process.OutputDataReceived += (sender, e) => {
+                    lock (stdOutput) {
                         stdOutput.AppendLine(e.Data);
                     }
                 };
-                process.ErrorDataReceived += (sender, e) =>
-                {
-                    lock (stdOutput)
-                    {
+                process.ErrorDataReceived += (sender, e) => {
+                    lock (stdOutput) {
                         stdOutput.AppendLine("STDERR: " + e.Data);
                     }
                 };
@@ -184,8 +156,7 @@ namespace LatexScriptWrapper
                 process.CancelOutputRead();
                 process.CancelErrorRead();
                 // verify the result
-                if (process.ExitCode == 0 || File.Exists(pdfFile.FullName))
-                {
+                if (process.ExitCode == 0 || File.Exists(pdfFile.FullName)) {
                     if (process.ExitCode == 0)
                         Debug.WriteLine("Tex: Command was successfully executed.");
                     else
@@ -193,15 +164,12 @@ namespace LatexScriptWrapper
                     //var pdfFile = texFile.Directory.EnumerateFiles(texFile.NameWithoutExtension() + ".pdf").FirstOrDefault();
                     if (!File.Exists(pdfFile.FullName))
                         throw new TexCompilationException("Tex-Command was successfully executed but there is no output-PDF file found");
-                    if (destPdfFile != null && destPdfFile.FullName != pdfFile.FullName)
-                    {
+                    if (destPdfFile != null && destPdfFile.FullName != pdfFile.FullName) {
                         if (File.Exists(destPdfFile.FullName))
                             destPdfFile.Delete();
                         pdfFile.MoveTo(destPdfFile.FullName);
                     }
-                }
-                else
-                {
+                } else {
                     // some thing went wrong ...
 
                     // get logging
@@ -209,8 +177,7 @@ namespace LatexScriptWrapper
                     log += "Standard output:\n" + stdOutput.ToString();
                     log += "\n\n\n\n";
 
-                    if (File.Exists(logFile.FullName))
-                    {
+                    if (File.Exists(logFile.FullName)) {
                         using (var reader = new StreamReader(logFile.FullName))
                             log += reader.ReadToEnd();
                     }
@@ -224,9 +191,7 @@ namespace LatexScriptWrapper
                         + workingDir + "' exited with error: "
                         + process.ExitCode + Environment.NewLine + log);
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 if (ex is TexCompilationException)
                     throw;
                 Debug.WriteLine("An Error occured while processing file " + texFile.FullName + Environment.NewLine
@@ -241,23 +206,19 @@ namespace LatexScriptWrapper
         #endregion
 
         #region check config
-        public bool CheckConfiguration()
-        {
-            try
-            {
+        public bool CheckConfiguration() {
+            try {
                 this.Compile(@"\documentclass{article}
                 \begin{document}
                 Hello World!
                 \end{document}", null);
                 return true;
-            }
-            catch { return false; }
+            } catch { return false; }
         }
         #endregion
     }
 
-    public class TexCompilationException : Exception
-    {
+    public class TexCompilationException : Exception {
         public TexCompilationException() : base() { }
         public TexCompilationException(string message) : base(message) { }
         public TexCompilationException(string message, Exception innerException) : base(message, innerException) { }

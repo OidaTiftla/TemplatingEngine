@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Xml;
 
@@ -70,11 +71,12 @@ namespace LatexScriptWrapper {
         #region constructor
         public TexWrapper() {
             this.Configuration = new TexConfig();
-            var config = new FileInfo("Configuration.xml");
+            var exeDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var config = new FileInfo(Path.Combine(exeDir, "Configuration.xml"));
             if (config.Exists)
                 this.Configuration.Load(config);
             else {
-                config = new FileInfo("Config\\Configuration.xml");
+                config = new FileInfo(Path.Combine(exeDir, "Config", "Configuration.xml"));
                 if (config.Exists)
                     this.Configuration.Load(config);
             }

@@ -1,14 +1,19 @@
 ﻿using System.IO;
 
 namespace ExtensionMethods {
+
     public static partial class IOExtension {
+
         #region file info
+
         public static string NameWithoutExtension(this FileInfo file) {
             return Path.GetFileNameWithoutExtension(file.Name);
         }
-        #endregion
+
+        #endregion file info
 
         #region temp file & directory
+
         public static FileInfo CreateTempFile() {
             return new FileInfo(Path.GetTempFileName());
         }
@@ -19,6 +24,7 @@ namespace ExtensionMethods {
                 ;
             return Directory.CreateDirectory(tmp);
         }
-        #endregion
+
+        #endregion temp file & directory
     }
 }

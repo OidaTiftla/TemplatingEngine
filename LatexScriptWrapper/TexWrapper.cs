@@ -9,18 +9,30 @@ using System.Text;
 using System.Xml;
 
 namespace LatexScriptWrapper {
+
     public class TexConfig {
+
         #region properties
+
         public string Command { get; set; }
         public List<string> Arguments { get; private set; }
-        #endregion
+
+        #endregion properties
 
         #region constructor
-        public TexConfig() { this.Arguments = new List<string>(); }
-        public TexConfig(FileInfo file) : this() { this.Load(file); }
-        #endregion
+
+        public TexConfig() {
+            this.Arguments = new List<string>();
+        }
+
+        public TexConfig(FileInfo file) : this() {
+            this.Load(file);
+        }
+
+        #endregion constructor
 
         #region load
+
         public bool Load(FileInfo file) {
             this.Command = null;
             this.Arguments.Clear();
@@ -43,9 +55,11 @@ namespace LatexScriptWrapper {
                 return false;
             }
         }
-        #endregion
+
+        #endregion load
 
         #region create process
+
         public Process CreateProcess(FileInfo texFile) {
             Process process = new Process();
             process.StartInfo.FileName = this.Command;
@@ -54,21 +68,28 @@ namespace LatexScriptWrapper {
             process.StartInfo.CreateNoWindow = true;
             return process;
         }
-        #endregion
+
+        #endregion create process
 
         #region ToString
+
         public override string ToString() {
             return this.Command + " " + this.Arguments.Implode(" ");
         }
-        #endregion
+
+        #endregion ToString
     }
 
     public class TexWrapper {
+
         #region properties
+
         public TexConfig Configuration { get; set; }
-        #endregion
+
+        #endregion properties
 
         #region constructor
+
         public TexWrapper() {
             this.Configuration = new TexConfig();
             var exeDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -81,11 +102,19 @@ namespace LatexScriptWrapper {
                     this.Configuration.Load(config);
             }
         }
-        public TexWrapper(FileInfo config) : this() { this.Configuration.Load(config); }
-        public TexWrapper(TexConfig config) : this() { this.Configuration = config; }
-        #endregion
+
+        public TexWrapper(FileInfo config) : this() {
+            this.Configuration.Load(config);
+        }
+
+        public TexWrapper(TexConfig config) : this() {
+            this.Configuration = config;
+        }
+
+        #endregion constructor
 
         #region compile
+
         public void Compile(string tex, FileInfo destPdfFile) {
             try {
                 var tmpDir = IOExtension.CreateTempDirectory();
@@ -205,9 +234,11 @@ namespace LatexScriptWrapper {
                     + workingDir + "'" + Environment.NewLine + "see inner exception for details", ex);
             }
         }
-        #endregion
+
+        #endregion compile
 
         #region check config
+
         public bool CheckConfiguration() {
             try {
                 this.Compile(@"\documentclass{article}
@@ -217,12 +248,19 @@ namespace LatexScriptWrapper {
                 return true;
             } catch { return false; }
         }
-        #endregion
+
+        #endregion check config
     }
 
     public class TexCompilationException : Exception {
-        public TexCompilationException() : base() { }
-        public TexCompilationException(string message) : base(message) { }
-        public TexCompilationException(string message, Exception innerException) : base(message, innerException) { }
+
+        public TexCompilationException() : base() {
+        }
+
+        public TexCompilationException(string message) : base(message) {
+        }
+
+        public TexCompilationException(string message, Exception innerException) : base(message, innerException) {
+        }
     }
 }

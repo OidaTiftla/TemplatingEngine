@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <configuration>
   <command>pdflatex</command>
-  <arg value="--synctex=1"/>
-  <arg value="--interaction=nonstopmode"/>
-  <arg value="--shell-escape"/>
+  <arg value="--synctex=1" />
+  <arg value="--interaction=nonstopmode" />
+  <arg value="--shell-escape" />
 </configuration>

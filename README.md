@@ -5,7 +5,7 @@ If you have any improvements, ideas, ... please let me know ;-)
 
 ## Pre-requisites
 1. Download and install some LaTeX compiler. For example [MiKTeX](http://miktex.org/download) or the [portable version](http://miktex.org/portable)
-3. Edit the command in `Configuration.xml` to match to your LaTeX compiler installation (by default `pdflatex` should work fine)
+2. In your C# project edit the command in `Configuration.xml` to match to your LaTeX compiler installation (by default `pdflatex` should work fine)
     * The Configuration.xml is searched first in the directory of the .exe and then in the subdirectory `Config/Configuration.xml`
     * You can also specify the configuration when creating a new `TexWrapper` or `LatexEngine` object
 
@@ -110,8 +110,8 @@ Process.Start(dest.FullName);
 
 ## Class model
 
-The main classes are CSharpEngine, LatexEngine, RazorEngine and T4Engine.
-LatexEngine uses TexWrapper to abstract the latex generation part into a separate class.
+The main classes are `CSharpEngine`, `LatexEngine`, `RazorEngine` and `T4Engine`.
+`LatexEngine` uses `TexWrapper` to abstract the latex generation part into a separate class.
 
 ### CSharpEngine
 
@@ -120,17 +120,17 @@ You can pass values to the template through the context parameters.
 
 ### LatexEngine
 
-Compiles and executes .tex-files with embedded C#-Code in it.
+Compiles and executes `.tex`-files with embedded C#-Code in it.
 You can pass values to the template through the context parameters.
-It uses CSharpEngine for compiling and executing a template.
-While running, it creates a .texcs-file, that contains the output from the CSharpEngine.
-This goes into the LaTeX-compiler (TexWrapper).
+It uses `CSharpEngine` for compiling and executing a template.
+While running, it creates a `.texcs`-file, that contains the output from the `CSharpEngine`.
+This goes into the LaTeX-compiler (`TexWrapper`).
 
 After generation you get an pdf file stream through the StreamWriter object.
 
 #### TexWrapper
 
-It holds the configuration for the LaTeX-compiler and runs it to create the .pdf-file
+It holds the configuration for the LaTeX-compiler and runs it to create the `.pdf`-file
 
 ## Contributing
 

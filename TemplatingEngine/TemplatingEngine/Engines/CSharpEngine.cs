@@ -286,10 +286,10 @@ namespace TemplatingEngine.Engines {
 
         public virtual void GenerateDynamic(Stream template, dynamic context, Stream output) {
             string input = null;
-            using (var stream = new StreamReader(template))
+            using (var stream = new StreamReader(template, Encoding.UTF8, true, 1024, leaveOpen: true))
                 input = stream.ReadToEnd();
             var text = this.GenerateDynamic(input, context);
-            using (var stream = new StreamWriter(output))
+            using (var stream = new StreamWriter(output, Encoding.UTF8, 1024, leaveOpen: true))
                 stream.Write(text);
         }
 

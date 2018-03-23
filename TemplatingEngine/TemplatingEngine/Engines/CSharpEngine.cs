@@ -253,15 +253,15 @@ namespace TemplatingEngine.Engines {
 
         #region implement IEngine
 
-        public string Generate<T>(string template, T context) {
+        public virtual string Generate<T>(string template, T context) {
             return this.GenerateDynamic(template, context);
         }
 
-        public void Generate<T>(Stream template, T context, Stream output) {
+        public virtual void Generate<T>(Stream template, T context, Stream output) {
             this.GenerateDynamic(template, context, output);
         }
 
-        public async Task<string> GenerateAsync<T>(string template, T context) {
+        public virtual async Task<string> GenerateAsync<T>(string template, T context) {
             string output = null;
             await Task.Run(() => {
                 Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
@@ -271,7 +271,7 @@ namespace TemplatingEngine.Engines {
             return output;
         }
 
-        public async void GenerateAsync<T>(Stream template, T context, Stream output) {
+        public virtual async void GenerateAsync<T>(Stream template, T context, Stream output) {
             await Task.Run(() => {
                 Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
@@ -279,12 +279,12 @@ namespace TemplatingEngine.Engines {
             });
         }
 
-        public string GenerateDynamic(string template, dynamic context) {
+        public virtual string GenerateDynamic(string template, dynamic context) {
             var script = this.Compile(template);
             return script.Run(context);
         }
 
-        public void GenerateDynamic(Stream template, dynamic context, Stream output) {
+        public virtual void GenerateDynamic(Stream template, dynamic context, Stream output) {
             string input = null;
             using (var stream = new StreamReader(template))
                 input = stream.ReadToEnd();
@@ -293,7 +293,7 @@ namespace TemplatingEngine.Engines {
                 stream.Write(text);
         }
 
-        public async Task<string> GenerateDynamicAsync(string template, dynamic context) {
+        public virtual async Task<string> GenerateDynamicAsync(string template, dynamic context) {
             string output = null;
             await Task.Run(() => {
                 Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
@@ -303,7 +303,7 @@ namespace TemplatingEngine.Engines {
             return output;
         }
 
-        public async void GenerateDynamicAsync(Stream template, dynamic context, Stream output) {
+        public virtual async void GenerateDynamicAsync(Stream template, dynamic context, Stream output) {
             await Task.Run(() => {
                 Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;

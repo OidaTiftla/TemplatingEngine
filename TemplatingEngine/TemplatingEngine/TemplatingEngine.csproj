@@ -41,10 +41,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
-    <Compile Include="Compiler\CustomCompiler.cs" />
-    <Compile Include="Compiler\LatexCompiler.cs" />
-    <Compile Include="Compiler\RazorCompiler.cs" />
-    <Compile Include="Compiler\T4Compiler.cs" />
+    <Compile Include="Engines\CustomEngine.cs" />
+    <Compile Include="Engines\IEngine.cs" />
+    <Compile Include="Engines\LatexEngine.cs" />
+    <Compile Include="Engines\RazorEngine.cs" />
+    <Compile Include="Engines\T4Engine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

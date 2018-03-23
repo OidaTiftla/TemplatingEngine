@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace ExtensionMethods {
 
-    internal static class AnonymousTypeHelper {
+    public static class AnonymousTypeHelper {
 
         /// <summary>
         /// source: http://stackoverflow.com/questions/2630370/c-sharp-dynamic-cannot-access-properties-from-anonymous-types-declared-in-anot

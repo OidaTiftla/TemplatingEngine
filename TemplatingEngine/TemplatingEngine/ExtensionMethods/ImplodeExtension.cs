@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ExtensionMethods {
 
-    internal static class EnumerableExtension {
+    public static class EnumerableExtension {
 
         public static string Implode<T>(this IEnumerable<T> list, string sep, string praefix = "", string suffix = "", Func<T, string> toString = null) {
             var sb = new StringBuilder();

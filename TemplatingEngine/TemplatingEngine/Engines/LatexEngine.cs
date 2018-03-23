@@ -324,14 +324,9 @@ namespace TemplatingEngine.Engines {
 
         #region constructors and destructor
 
-        public LatexEngine() : this(null) {
-        }
+        public LatexEngine() {
+            this.texWrapper_ = new TexWrapper();
 
-        public LatexEngine(FileInfo configFile) {
-            if (configFile == null)
-                this.texWrapper_ = new TexWrapper();
-            else
-                this.texWrapper_ = new TexWrapper(configFile);
             this.AddEscapeSequenze(@"%##", @"##%");
             this.AddEscapeSequenze(@"\verb|##", @"##|");
             this.AddEscapeSequenze(@"\verb$##", @"##$");
@@ -340,6 +335,16 @@ namespace TemplatingEngine.Engines {
             //this.AddEscapeSequenzeRegex(@"\\verb(?<k84>.)\#\#", @"\#\#\k<k84>");
             this.AddEscapeSequenze(@"\begin{comment}##", @"##\end{comment}");
             this.FunctionCode = texEscapeFunc;
+        }
+
+        public LatexEngine(TexConfig config)
+            : this() {
+            this.texWrapper_ = new TexWrapper(config);
+        }
+
+        public LatexEngine(FileInfo configFile)
+            : this() {
+            this.texWrapper_ = new TexWrapper(configFile);
         }
 
         #endregion constructors and destructor

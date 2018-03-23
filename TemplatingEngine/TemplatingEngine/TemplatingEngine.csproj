@@ -46,6 +46,9 @@
     <Compile Include="Engines\LatexEngine.cs" />
     <Compile Include="Engines\RazorEngine.cs" />
     <Compile Include="Engines\T4Engine.cs" />
+    <Compile Include="ExtensionMethods\AnonymousTypeHelper.cs" />
+    <Compile Include="ExtensionMethods\ImplodeExtension.cs" />
+    <Compile Include="ExtensionMethods\IOExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

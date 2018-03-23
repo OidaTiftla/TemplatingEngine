@@ -48,13 +48,18 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="CSharpEngineTest.cs" />
+    <Compile Include="LatexEngineTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\miktexdummy\miktexdummy.csproj">
+      <Project>{a99102e3-639a-4c1b-b665-ee412c3c024a}</Project>
+      <Name>miktexdummy</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TemplatingEngine\TemplatingEngine.csproj">
       <Project>{a6d93622-d15e-4f21-acb7-680b23571147}</Project>
       <Name>TemplatingEngine</Name>

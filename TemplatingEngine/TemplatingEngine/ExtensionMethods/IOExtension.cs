@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ExtensionMethods {
 
-    public static class IOExtension {
+    internal static class IOExtension {
 
         #region file info
 

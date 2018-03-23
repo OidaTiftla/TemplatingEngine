@@ -7,9 +7,9 @@ namespace TemplatingEngine.Sample {
     internal class Program {
 
         private static void Main(string[] args) {
-            // Create the RepotGenerator
+            // Create the LatexEngine
             // Here you can pass a Configuration, otherwise
-            // CSTexReportGenerator searches Configuration.xml
+            // LatexEngine searches Configuration.xml
             // in the current directory and if it is not there
             // he searches it in ./Config/
             var engine = new LatexEngine();

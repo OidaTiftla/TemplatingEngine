@@ -73,16 +73,15 @@ What goes into the LaTeX-compiler and you get your PDF-file.
 Here is a sample script:
 
 ```csharp
-// Create the RepotGenerator
+// Create the LatexEngine
 // Here you can pass a Configuration, otherwise
-// CSTexReportGenerator searches Configuration.xml
+// LatexEngine searches Configuration.xml
 // in the current directory and if it is not there
 // he searches it in ./Config/
-var generator = new CSTexReportGenerator();
+var engine = new LatexEngine();
 
 // Create an object, that you can use in your LaTeX
-var o = new
-{
+var o = new {
     Value = 25,
     x = false,
     y = true,
@@ -101,7 +100,9 @@ var o = new
 // Create the PDF
 var src = new FileInfo("TestFile.tex");
 var dest = new FileInfo("TestFile.pdf");
-generator.Create(src, o, dest);
+using (var srcStream = src.OpenRead())
+using (var destStream = dest.OpenWrite())
+    engine.Generate(srcStream, o, destStream);
 
 // Show the PDF
 Process.Start(dest.FullName);

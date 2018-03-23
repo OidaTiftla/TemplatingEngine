@@ -420,7 +420,7 @@ namespace TemplatingEngine.Engines {
             var tempDir = IOExtension.CreateTempDirectory();
             try {
                 var pdfFile = new FileInfo(Path.Combine(tempDir.FullName, "output.pdf"));
-                using (var stream = new StreamReader(template, Encoding.UTF8,true, 1024, leaveOpen: true))
+                using (var stream = new StreamReader(template, Encoding.UTF8, true, 1024, leaveOpen: true))
                     this.CreatePdf(stream.ReadToEnd(), context, pdfFile);
                 using (var stream = File.OpenRead(pdfFile.FullName))
                     stream.WriteTo(output);

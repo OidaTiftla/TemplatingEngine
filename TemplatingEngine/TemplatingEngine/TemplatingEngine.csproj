@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
-    <Compile Include="Engines\CustomEngine.cs" />
+    <Compile Include="Engines\CSharpEngine.cs" />
     <Compile Include="Engines\IEngine.cs" />
     <Compile Include="Engines\LatexEngine.cs" />
     <Compile Include="Engines\RazorEngine.cs" />

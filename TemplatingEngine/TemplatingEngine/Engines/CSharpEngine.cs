@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace TemplatingEngine.Engines {
 
-    public class CustomEngine : IEngine {
+    public class CSharpEngine : IEngine {
 
         #region types
 
@@ -73,7 +73,7 @@ namespace TemplatingEngine.Engines {
 
         #region constructors and destructor
 
-        public CustomEngine() {
+        public CSharpEngine() {
             this.escape_sequenzes_ = new List<IEscapeSequenze>();
             this.usings_ = new List<string>();
             this.AddEscapeSequenze(@"{##", @"##}");

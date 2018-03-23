@@ -13,7 +13,7 @@ namespace TemplatingEngine.Engines {
             throw new System.NotImplementedException();
         }
 
-        public void Generate<T>(StreamReader template, T context, StreamWriter output) {
+        public void Generate<T>(Stream template, T context, Stream output) {
             throw new System.NotImplementedException();
         }
 
@@ -27,7 +27,7 @@ namespace TemplatingEngine.Engines {
             return output;
         }
 
-        public async void GenerateAsync<T>(StreamReader template, T context, StreamWriter output) {
+        public async void GenerateAsync<T>(Stream template, T context, Stream output) {
             await Task.Run(() => {
                 Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
@@ -39,7 +39,7 @@ namespace TemplatingEngine.Engines {
             throw new System.NotImplementedException();
         }
 
-        public void GenerateDynamic(StreamReader template, dynamic context, StreamWriter output) {
+        public void GenerateDynamic(Stream template, dynamic context, Stream output) {
             throw new System.NotImplementedException();
         }
 
@@ -53,7 +53,7 @@ namespace TemplatingEngine.Engines {
             return output;
         }
 
-        public async void GenerateDynamicAsync(StreamReader template, dynamic context, StreamWriter output) {
+        public async void GenerateDynamicAsync(Stream template, dynamic context, Stream output) {
             await Task.Run(() => {
                 Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;

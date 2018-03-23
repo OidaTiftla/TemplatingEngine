@@ -257,7 +257,7 @@ namespace TemplatingEngine.Engines {
             return this.GenerateDynamic(template, context);
         }
 
-        public void Generate<T>(StreamReader template, T context, StreamWriter output) {
+        public void Generate<T>(Stream template, T context, Stream output) {
             this.GenerateDynamic(template, context, output);
         }
 
@@ -271,7 +271,7 @@ namespace TemplatingEngine.Engines {
             return output;
         }
 
-        public async void GenerateAsync<T>(StreamReader template, T context, StreamWriter output) {
+        public async void GenerateAsync<T>(Stream template, T context, Stream output) {
             await Task.Run(() => {
                 Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
@@ -284,9 +284,13 @@ namespace TemplatingEngine.Engines {
             return script.Run(context);
         }
 
-        public void GenerateDynamic(StreamReader template, dynamic context, StreamWriter output) {
-            var text = this.GenerateDynamic(template.ReadToEnd(), context);
-            output.Write(text);
+        public void GenerateDynamic(Stream template, dynamic context, Stream output) {
+            string input = null;
+            using (var stream = new StreamReader(template))
+                input = stream.ReadToEnd();
+            var text = this.GenerateDynamic(input, context);
+            using (var stream = new StreamWriter(output))
+                stream.Write(text);
         }
 
         public async Task<string> GenerateDynamicAsync(string template, dynamic context) {
@@ -299,7 +303,7 @@ namespace TemplatingEngine.Engines {
             return output;
         }
 
-        public async void GenerateDynamicAsync(StreamReader template, dynamic context, StreamWriter output) {
+        public async void GenerateDynamicAsync(Stream template, dynamic context, Stream output) {
             await Task.Run(() => {
                 Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;

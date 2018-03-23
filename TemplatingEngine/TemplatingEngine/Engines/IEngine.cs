@@ -7,18 +7,18 @@ namespace TemplatingEngine.Engines {
 
         string Generate<T>(string template, T context);
 
-        void Generate<T>(StreamReader template, T context, StreamWriter output);
+        void Generate<T>(Stream template, T context, Stream output);
 
         Task<string> GenerateAsync<T>(string template, T context);
 
-        void GenerateAsync<T>(StreamReader template, T context, StreamWriter output);
+        void GenerateAsync<T>(Stream template, T context, Stream output);
 
         string GenerateDynamic(string template, dynamic context);
 
-        void GenerateDynamic(StreamReader template, dynamic context, StreamWriter output);
+        void GenerateDynamic(Stream template, dynamic context, Stream output);
 
         Task<string> GenerateDynamicAsync(string template, dynamic context);
 
-        void GenerateDynamicAsync(StreamReader template, dynamic context, StreamWriter output);
+        void GenerateDynamicAsync(Stream template, dynamic context, Stream output);
     }
 }

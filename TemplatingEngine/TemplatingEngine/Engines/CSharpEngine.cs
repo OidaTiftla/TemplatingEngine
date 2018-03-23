@@ -155,23 +155,19 @@ namespace TemplatingEngine.Engines {
         private IContentsScript createScript(string code, string func = null) {
             string classcode = this.Usings.Implode("\n", "", "", x => "using " + x + ";") + @"
 
-                namespace UserFunctions
-                {
-                    public class UserFunction : " + typeof(IContentsScript).FullName + @"
-                    {
+                namespace UserFunctions {
+                    public class UserFunction : " + typeof(IContentsScript).FullName.Replace("+", ".") + @" {
                         public IList<string> Contents { get; private set; }
                         public IList<string> Outputs { get; private set; }
 
-                        public UserFunction()
-                        {
+                        public UserFunction() {
                             this.Contents = new List<string>();
                             this.Outputs = new List<string>();
                         }
 
                         __func__
 
-                        public string Run(dynamic o)
-                        {
+                        public string Run(dynamic o) {
                             this.Outputs.Clear();
                             var sb = new StringBuilder();
                             this.run(" + typeof(AnonymousTypeHelper).FullName + @".ToExpandoObjectIfNecessary(o));
@@ -180,13 +176,11 @@ namespace TemplatingEngine.Engines {
                             return sb.ToString();
                         }
 
-                        public void Print(object o)
-                        {
+                        public void Print(object o) {
                             this.Outputs.Add(o.ToString());
                         }
 
-                        private void run(dynamic o)
-                        {
+                        private void run(dynamic o) {
                             //System.Diagnostics.Debugger.Break();
                             __code__
                         }

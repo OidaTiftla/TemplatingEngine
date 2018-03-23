@@ -1,51 +1,50 @@
-﻿using Microsoft.CSharp;
+﻿using ExtensionMethods;
+using Microsoft.CSharp;
 using System;
-using System.Linq;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using ExtensionMethods;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace LatexScriptWrapper
-{
-    public interface IScript
-    {
-        /// <summary>
-        /// Run script with parameter o
-        /// </summary>
-        /// <param name="o"></param>
-        /// <returns></returns>
-        string Run(dynamic o);
-    }
+namespace TemplatingEngine.Engines {
 
-    public interface ICompiler
-    {
-        IScript Compile(string code);
-    }
+    public class CSharpEngine : IEngine {
 
-    public interface IContentsScript : IScript
-    {
-        IList<string> Contents { get; }
-    }
+        #region types
 
-    public class CSScriptCompiler : ICompiler
-    {
-        public interface IEscapeSequenze
-        {
+        public interface IScript {
+
+            /// <summary>
+            /// Run script with parameter o
+            /// </summary>
+            /// <param name="o"></param>
+            /// <returns></returns>
+            string Run(dynamic o);
+        }
+
+        public interface IContentsScript : IScript {
+            IList<string> Contents { get; }
+        }
+
+        #endregion types
+
+        public interface IEscapeSequenze {
             string BeginRegex { get; }
             string EndRegex { get; }
         }
 
-        public class EscapeSequenze : IEscapeSequenze
-        {
+        public class EscapeSequenze : IEscapeSequenze {
             public string Begin { get; set; }
             public string End { get; set; }
             public string BeginRegex { get { return Regex.Escape(this.Begin); } }
             public string EndRegex { get { return Regex.Escape(this.End); } }
-            public EscapeSequenze(string begin, string end)
-            {
+
+            public EscapeSequenze(string begin, string end) {
                 this.Begin = begin;
                 this.End = end;
             }
@@ -62,14 +61,19 @@ namespace LatexScriptWrapper
         //    }
         //}
 
+        #region properties
+
         private List<IEscapeSequenze> escape_sequenzes_;
         private List<string> usings_;
         public ICollection<IEscapeSequenze> EscapeSequenzes { get { return this.escape_sequenzes_; } }
         public IEnumerable<string> Usings { get { return this.usings_; } }
         public string FunctionCode { get; set; }
 
-        public CSScriptCompiler()
-        {
+        #endregion properties
+
+        #region constructors and destructor
+
+        public CSharpEngine() {
             this.escape_sequenzes_ = new List<IEscapeSequenze>();
             this.usings_ = new List<string>();
             this.AddEscapeSequenze(@"{##", @"##}");
@@ -85,8 +89,11 @@ namespace LatexScriptWrapper
             this.AddUsing("ExtensionMethods");
         }
 
-        public void AddEscapeSequenze(string begin, string end)
-        {
+        #endregion constructors and destructor
+
+        #region public interface
+
+        public void AddEscapeSequenze(string begin, string end) {
             this.EscapeSequenzes.Add(new EscapeSequenze(begin, end));
         }
 
@@ -99,24 +106,25 @@ namespace LatexScriptWrapper
         /// Add namespace for using directives
         /// </summary>
         /// <param name="ns">namespace</param>
-        public void AddUsing(string ns)
-        {
+        public void AddUsing(string ns) {
             if (!this.usings_.Contains(ns))
                 this.usings_.Add(ns);
         }
 
-        public IScript Compile(string source_script)
-        {
+        public IScript Compile(string template) {
             var contents = new List<string>();
-            var cs = createCS(source_script, contents);
+            var cs = createCSharp(template, contents);
             var script = createScript(cs, this.FunctionCode);
             foreach (var c in contents)
                 script.Contents.Add(c);
             return script;
         }
 
-        private string createCS(string tex, List<string> contents)
-        {
+        #endregion public interface
+
+        #region private
+
+        private string createCSharp(string template, List<string> contents) {
             var csPartsRegex = new Regex(this.EscapeSequenzes.Implode("|", "(", ")",
                 x => @"(?<=" + x.BeginRegex + @").*?(?=" + x.EndRegex + @")"), RegexOptions.Singleline);
             var printRegex = new Regex(@"(?<=\s+)print\s+(?<retval>.*?)(?=;)", RegexOptions.Singleline);
@@ -126,18 +134,16 @@ namespace LatexScriptWrapper
                 + this.EscapeSequenzes.Implode(")|(", "(", ")", x => x.BeginRegex) + @"|$)", RegexOptions.Singleline);
 
             contents.Clear();
-            tex = csPartsRegex.Replace(tex, m =>
+            template = csPartsRegex.Replace(template, m =>
                 printRegex.Replace(m.ToString(), mm => "Print(" + mm.Groups["retval"].ToString() + ")"));
-            return contentPartsRegex.Replace(tex, m =>
-            {
+            return contentPartsRegex.Replace(template, m => {
                 var content = m.Groups["content"].Value;
                 contents.Add(content);
                 return "\r\nPrint(this.Contents[" + (contents.Count - 1).ToString() + "]);\r\n";
             });
         }
 
-        private bool containsFunction(dynamic script, string func)
-        {
+        private bool containsFunction(dynamic script, string func) {
             var t = script.GetType() as Type;
             if (t.GetMethod(func) != null)
                 return true;
@@ -146,27 +152,22 @@ namespace LatexScriptWrapper
             return false;
         }
 
-        private IContentsScript createScript(string code, string func = null)
-        {
+        private IContentsScript createScript(string code, string func = null) {
             string classcode = this.Usings.Implode("\n", "", "", x => "using " + x + ";") + @"
 
-                namespace UserFunctions
-                {                
-                    public class UserFunction : " + typeof(IContentsScript).FullName + @"
-                    {
+                namespace UserFunctions {
+                    public class UserFunction : " + typeof(IContentsScript).FullName.Replace("+", ".") + @" {
                         public IList<string> Contents { get; private set; }
                         public IList<string> Outputs { get; private set; }
 
-                        public UserFunction()
-                        {
+                        public UserFunction() {
                             this.Contents = new List<string>();
                             this.Outputs = new List<string>();
                         }
 
                         __func__
 
-                        public string Run(dynamic o)
-                        {
+                        public string Run(dynamic o) {
                             this.Outputs.Clear();
                             var sb = new StringBuilder();
                             this.run(" + typeof(AnonymousTypeHelper).FullName + @".ToExpandoObjectIfNecessary(o));
@@ -175,13 +176,11 @@ namespace LatexScriptWrapper
                             return sb.ToString();
                         }
 
-                        public void Print(object o)
-                        {
+                        public void Print(object o) {
                             this.Outputs.Add(o.ToString());
                         }
 
-                        private void run(dynamic o)
-                        {
+                        private void run(dynamic o) {
                             //System.Diagnostics.Debugger.Break();
                             __code__
                         }
@@ -202,22 +201,18 @@ namespace LatexScriptWrapper
             //Add the required assemblies
             AddIfNotExists(parameters, typeof(IContentsScript).Assembly.Location);
             AddIfNotExists(parameters, typeof(AnonymousTypeHelper).Assembly.Location);
-            foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                try
-                {
+            foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies()) {
+                try {
                     if (asm.FullName.Contains("Anonymously Hosted DynamicMethods Assembly"))
                         continue;
                     //if (asm.Location.Contains("Microsoft.Xna") || asm.Location.Contains("Gibbo.Library")
                     //    || asm.Location.Contains("System"))
                     AddIfNotExists(parameters, asm.Location);
-                }
-                catch { }
+                } catch { }
             }
             var add = true;
             foreach (var asm in parameters.ReferencedAssemblies)
-                if (asm.Contains("Microsoft.CSharp"))
-                {
+                if (asm.Contains("Microsoft.CSharp")) {
                     add = false;
                     break;
                 }
@@ -226,12 +221,10 @@ namespace LatexScriptWrapper
 
             CompilerResults results = provider.CompileAssemblyFromSource(parameters, finalCode);
 
-            if (results.Errors.HasErrors)
-            {
+            if (results.Errors.HasErrors) {
                 StringBuilder sb = new StringBuilder();
 
-                foreach (CompilerError error in results.Errors)
-                {
+                foreach (CompilerError error in results.Errors) {
                     if (error.IsWarning)
                         sb.AppendLine(String.Format("Warning ({0}) Zeile: {1} Spalte: {2}\n{3}", error.ErrorNumber, error.Line, error.Column, error.ErrorText));
                     else
@@ -245,11 +238,73 @@ namespace LatexScriptWrapper
             return binaryFunction.GetConstructor(new Type[0]).Invoke(new object[0]) as IContentsScript;
         }
 
-        private static void AddIfNotExists(CompilerParameters parameters, string location)
-        {
+        private static void AddIfNotExists(CompilerParameters parameters, string location) {
             if (!parameters.ReferencedAssemblies.Contains(location))
                 parameters.ReferencedAssemblies.Add(location);
-
         }
+
+        #endregion private
+
+        #region implement IEngine
+
+        public virtual string Generate<T>(string template, T context) {
+            return this.GenerateDynamic(template, context);
+        }
+
+        public virtual void Generate<T>(Stream template, T context, Stream output) {
+            this.GenerateDynamic(template, context, output);
+        }
+
+        public virtual async Task<string> GenerateAsync<T>(string template, T context) {
+            string output = null;
+            await Task.Run(() => {
+                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+                Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+                output = this.Generate(template, context);
+            });
+            return output;
+        }
+
+        public virtual async void GenerateAsync<T>(Stream template, T context, Stream output) {
+            await Task.Run(() => {
+                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+                Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+                this.Generate(template, context, output);
+            });
+        }
+
+        public virtual string GenerateDynamic(string template, dynamic context) {
+            var script = this.Compile(template);
+            return script.Run(context);
+        }
+
+        public virtual void GenerateDynamic(Stream template, dynamic context, Stream output) {
+            string input = null;
+            using (var stream = new StreamReader(template, Encoding.UTF8, true, 1024, leaveOpen: true))
+                input = stream.ReadToEnd();
+            var text = this.GenerateDynamic(input, context);
+            using (var stream = new StreamWriter(output, Encoding.UTF8, 1024, leaveOpen: true))
+                stream.Write(text);
+        }
+
+        public virtual async Task<string> GenerateDynamicAsync(string template, dynamic context) {
+            string output = null;
+            await Task.Run(() => {
+                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+                Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+                output = this.GenerateDynamic(template, context);
+            });
+            return output;
+        }
+
+        public virtual async void GenerateDynamicAsync(Stream template, dynamic context, Stream output) {
+            await Task.Run(() => {
+                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+                Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+                this.GenerateDynamic(template, context, output);
+            });
+        }
+
+        #endregion implement IEngine
     }
 }

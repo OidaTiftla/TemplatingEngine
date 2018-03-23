@@ -367,5 +367,38 @@ namespace ExtensionMethods {
         }
 
         #endregion executing assembly
+
+        #region search in path
+
+        /// <summary>
+        /// Expands environment variables and, if unqualified, locates the exe in the working directory
+        /// or the evironment's path.
+        /// </summary>
+        /// <param name="exe">The name of the executable file</param>
+        /// <returns>The fully-qualified path to the file</returns>
+        /// <exception cref="System.IO.FileNotFoundException">Raised when the exe was not found</exception>
+        public static string FindExePath(string exe) {
+            // source: http://csharptest.net/526/how-to-search-the-environments-path-for-an-exe-or-dll/index.html
+            exe = Environment.ExpandEnvironmentVariables(exe);
+            if (!File.Exists(exe)) {
+                if (Path.GetDirectoryName(exe) == String.Empty) {
+                    var exts = (Environment.GetEnvironmentVariable("PATHEXT") ?? "").Split(';').Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToList();
+                    var dirs = (Environment.GetEnvironmentVariable("PATH") ?? "").Split(';').Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToList();
+                    foreach (string test in dirs) {
+                        var path = Path.Combine(test, exe);
+                        if (File.Exists(path))
+                            return Path.GetFullPath(path);
+                        foreach (var ext in exts) {
+                            if (File.Exists(path + ext))
+                                return Path.GetFullPath(path + ext);
+                        }
+                    }
+                }
+                throw new FileNotFoundException(new FileNotFoundException().Message, exe);
+            }
+            return Path.GetFullPath(exe);
+        }
+
+        #endregion search in path
     }
 }

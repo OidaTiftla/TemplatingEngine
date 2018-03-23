@@ -69,7 +69,7 @@ namespace TemplatingEngine.Engines {
 
             public Process CreateProcess(FileInfo texFile) {
                 Process process = new Process();
-                process.StartInfo.FileName = this.Command;
+                process.StartInfo.FileName = IOExtension.FindExePath(this.Command);
                 process.StartInfo.Arguments = this.Arguments.Concat(new string[] { "\"" + texFile.FullName + "\"" }).Implode(" ");
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.CreateNoWindow = true;

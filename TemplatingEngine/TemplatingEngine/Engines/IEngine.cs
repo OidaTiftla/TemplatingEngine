@@ -5,13 +5,17 @@ namespace TemplatingEngine.Engines {
 
     public interface IEngine {
 
-        string Generate<T>(string template, T context);
+        string Generate<T>(string template, T context)
+            where T : class;
 
-        void Generate<T>(Stream template, T context, Stream output);
+        void Generate<T>(Stream template, T context, Stream output)
+            where T : class;
 
-        Task<string> GenerateAsync<T>(string template, T context);
+        Task<string> GenerateAsync<T>(string template, T context)
+            where T : class;
 
-        void GenerateAsync<T>(Stream template, T context, Stream output);
+        void GenerateAsync<T>(Stream template, T context, Stream output)
+            where T : class;
 
         string GenerateDynamic(string template, dynamic context);
 

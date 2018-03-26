@@ -9,15 +9,18 @@ namespace TemplatingEngine.Engines {
 
         #region implement IEngine
 
-        public string Generate<T>(string template, T context) {
+        public string Generate<T>(string template, T context)
+            where T : class {
             throw new System.NotImplementedException();
         }
 
-        public void Generate<T>(Stream template, T context, Stream output) {
+        public void Generate<T>(Stream template, T context, Stream output)
+            where T : class {
             throw new System.NotImplementedException();
         }
 
-        public async Task<string> GenerateAsync<T>(string template, T context) {
+        public async Task<string> GenerateAsync<T>(string template, T context)
+            where T : class {
             string output = null;
             await Task.Run(() => {
                 Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
@@ -27,7 +30,8 @@ namespace TemplatingEngine.Engines {
             return output;
         }
 
-        public async void GenerateAsync<T>(Stream template, T context, Stream output) {
+        public async void GenerateAsync<T>(Stream template, T context, Stream output)
+            where T : class {
             await Task.Run(() => {
                 Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;

@@ -247,15 +247,18 @@ namespace TemplatingEngine.Engines {
 
         #region implement IEngine
 
-        public virtual string Generate<T>(string template, T context) {
+        public virtual string Generate<T>(string template, T context)
+            where T : class {
             return this.GenerateDynamic(template, context);
         }
 
-        public virtual void Generate<T>(Stream template, T context, Stream output) {
+        public virtual void Generate<T>(Stream template, T context, Stream output)
+            where T : class {
             this.GenerateDynamic(template, context, output);
         }
 
-        public virtual async Task<string> GenerateAsync<T>(string template, T context) {
+        public virtual async Task<string> GenerateAsync<T>(string template, T context)
+            where T : class {
             string output = null;
             await Task.Run(() => {
                 Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
@@ -265,7 +268,8 @@ namespace TemplatingEngine.Engines {
             return output;
         }
 
-        public virtual async void GenerateAsync<T>(Stream template, T context, Stream output) {
+        public virtual async void GenerateAsync<T>(Stream template, T context, Stream output)
+            where T : class {
             await Task.Run(() => {
                 Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;

@@ -35,7 +35,7 @@ namespace TemplatingEngine.Sample {
             var src = new FileInfo("TestFile.tex");
             var dest = new FileInfo("TestFile.pdf");
             using (var srcStream = src.OpenRead())
-            using (var destStream = dest.OpenWrite())
+            using (var destStream = new FileStream(dest.FullName, FileMode.Create))
                 engine.Generate(srcStream, o, destStream);
 
             // Show the PDF

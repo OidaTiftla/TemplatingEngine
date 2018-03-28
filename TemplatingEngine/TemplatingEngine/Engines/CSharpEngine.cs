@@ -87,6 +87,7 @@ namespace TemplatingEngine.Engines {
             this.AddUsing("System.Text");
             this.AddUsing("System.Text.RegularExpressions");
             this.AddUsing("ExtensionMethods");
+            this.AddUsing("TemplatingEngine.Engines.Helpers");
         }
 
         #endregion constructors and destructor

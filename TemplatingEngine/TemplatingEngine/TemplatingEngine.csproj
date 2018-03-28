@@ -43,6 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Engines\CSharpEngine.cs" />
+    <Compile Include="Engines\Helpers\CsvHelper.cs" />
+    <Compile Include="Engines\Helpers\TexHelper.cs" />
     <Compile Include="Engines\IEngine.cs" />
     <Compile Include="Engines\LatexEngine.cs" />
     <Compile Include="Engines\RazorEngine.cs" />

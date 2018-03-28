@@ -273,49 +273,6 @@ namespace TemplatingEngine.Engines {
 
         #endregion types
 
-        #region static
-
-        private static string texEscapeFunc = @"
-            class Tex {
-                public static string Escape(object o) { return Escape(o.ToString()); }
-                public static string Escape(string text) {
-                    if (text == null)
-                        return """";
-
-                    var sb = new StringBuilder();
-                    foreach (var c in text) {
-                        switch (c) {
-                            case '\\': sb.Append(@""{\texttt{\char`\\}""); break;
-                            //case '\\': sb.Append(@""{\textbackslash}""); break;
-                            case '{': sb.Append(@""\{""); break;
-                            case '}': sb.Append(@""\}""); break;
-                            case '<': sb.Append(@""{\textless}""); break;
-                            case '>': sb.Append(@""{\textgreater}""); break;
-                            case '~': sb.Append(@""{\textasciitilde}""); break;
-                            case '€': sb.Append(@""{\texteuro}""); break;
-                            case '_': sb.Append(@""\_""); break;
-                            case '^': sb.Append(@""\hat{\text{\ }}""); break;
-                            case '§': sb.Append(@""\S""); break;
-                            case '$': sb.Append(@""\$""); break;
-                            case '&': sb.Append(@""\&""); break;
-                            case '#': sb.Append(@""\#""); break;
-                            case '%': sb.Append(@""\%""); break;
-                            case ' ': sb.Append(@""\ ""); break;
-                            case '""': sb.Append(@""""""'""); break;
-                            case ',': sb.Append(@""{,}""); break;
-                            default: sb.Append(c); break;
-                        }
-                        //if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'))
-                        //    sb.Append(c);
-                        //else
-                        //    sb.Append(@""\char"""""" + ((int)c).ToString(""X"") + @"" "");
-                    }
-                    return sb.ToString().Replace(""\n"",@""\\"");
-                }
-            }";
-
-        #endregion static
-
         #region properties
 
         private TexWrapper texWrapper_ = null;
@@ -334,7 +291,6 @@ namespace TemplatingEngine.Engines {
             //this.AddEscapeSequenzeRegex(@"\\verb.\#\#", @"\#\#.");
             //this.AddEscapeSequenzeRegex(@"\\verb(?<k84>.)\#\#", @"\#\#\k<k84>");
             this.AddEscapeSequenze(@"\begin{comment}##", @"##\end{comment}");
-            this.FunctionCode = texEscapeFunc;
         }
 
         public LatexEngine(TexConfig config)

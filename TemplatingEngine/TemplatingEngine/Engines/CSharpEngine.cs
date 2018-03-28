@@ -103,15 +103,6 @@ namespace TemplatingEngine.Engines {
         //    this.EscapeSequenzes.Add(new EscapeSequenzeRegex(begin, end));
         //}
 
-        /// <summary>
-        /// Add namespace for using directives
-        /// </summary>
-        /// <param name="ns">namespace</param>
-        public void AddUsing(string ns) {
-            if (!this.usings_.Contains(ns))
-                this.usings_.Add(ns);
-        }
-
         public IScript Compile(string template) {
             var contents = new List<string>();
             var cs = createCSharp(template, contents);
@@ -247,6 +238,15 @@ namespace TemplatingEngine.Engines {
         #endregion private
 
         #region implement IEngine
+
+        /// <summary>
+        /// Add namespace for using directives
+        /// </summary>
+        /// <param name="ns">namespace</param>
+        public void AddUsing(string ns) {
+            if (!this.usings_.Contains(ns))
+                this.usings_.Add(ns);
+        }
 
         public virtual string Generate<T>(string template, T context) {
             return this.GenerateDynamic(template, context);

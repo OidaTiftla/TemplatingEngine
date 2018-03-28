@@ -5,6 +5,8 @@ namespace TemplatingEngine.Engines {
 
     public interface IEngine {
 
+        void AddUsing(string ns);
+
         string Generate<T>(string template, T context);
 
         void Generate<T>(Stream template, T context, Stream output);

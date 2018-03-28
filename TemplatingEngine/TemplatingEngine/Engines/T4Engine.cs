@@ -9,6 +9,16 @@ namespace TemplatingEngine.Engines {
 
         #region implement IEngine
 
+        /// <summary>
+        /// Add namespace for using directives
+        /// </summary>
+        /// <param name="ns">namespace</param>
+        public void AddUsing(string ns) {
+            //if (!this.usings_.Contains(ns))
+            //    this.usings_.Add(ns);
+            throw new System.NotImplementedException();
+        }
+
         public string Generate<T>(string template, T context) {
             throw new System.NotImplementedException();
         }

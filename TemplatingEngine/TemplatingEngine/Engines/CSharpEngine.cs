@@ -193,13 +193,20 @@ namespace TemplatingEngine.Engines {
             //Add the required assemblies
             AddIfNotExists(parameters, typeof(IContentsScript).Assembly.Location);
             AddIfNotExists(parameters, typeof(AnonymousTypeHelper).Assembly.Location);
-            foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies()) {
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (Assembly asm in assemblies) {
                 try {
                     if (asm.FullName.Contains("Anonymously Hosted DynamicMethods Assembly"))
                         continue;
                     //if (asm.Location.Contains("Microsoft.Xna") || asm.Location.Contains("Gibbo.Library")
                     //    || asm.Location.Contains("System"))
-                    AddIfNotExists(parameters, asm.Location);
+                    if (string.IsNullOrWhiteSpace(asm.Location)) {
+                        //var name = asm.GetName();
+                        //var location = name.Name + ".dll";
+                        //if (File.Exists(location))
+                        //    AddIfNotExists(parameters, location);
+                    } else
+                        AddIfNotExists(parameters, asm.Location);
                 } catch { }
             }
             var add = true;

@@ -7,7 +7,10 @@
         }
 
         public static string Escape(string text) {
-            return $"\"{text?.Replace("\"", "\"\"")?.Replace("\n", " ")}\"";
+            if (text?.Contains("\"") == true)
+                return $"\"{text?.Replace("\"", "\"\"")?.Replace("\n", " ")}\"";
+            else
+                return $"{text?.Replace("\n", " ")}";
         }
     }
 }

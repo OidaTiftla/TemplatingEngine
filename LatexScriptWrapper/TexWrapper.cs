@@ -86,14 +86,17 @@ namespace LatexScriptWrapper {
         #endregion
 
         #region compile
-        public void Compile(string tex, FileInfo destPdfFile) {
+        public void Compile(string tex, FileInfo destPdfFile, int count = 2) {
+            // by default compile twice (count=2), because latex needs it for index and other files
             try {
                 var tmpDir = IOExtension.CreateTempDirectory();
                 var texTmpFile = new FileInfo(Path.Combine(tmpDir.FullName, "temp.tex"));
                 using (var writer = new StreamWriter(texTmpFile.FullName)) {
                     writer.Write(tex);
                 }
-                this.compile(texTmpFile, destPdfFile);
+                for (var i = 0; i < count; ++i) {
+                    this.compile(texTmpFile, destPdfFile);
+                }
                 tmpDir.Delete(true);
             } catch (Exception ex) {
                 if (ex is TexCompilationException)
@@ -104,16 +107,22 @@ namespace LatexScriptWrapper {
             }
         }
 
-        public void Compile(FileInfo texFile, FileInfo destPdfFile) {
-            this.compile(texFile, destPdfFile);
+        public void Compile(FileInfo texFile, FileInfo destPdfFile, int count = 2) {
+            // by default compile twice (count=2), because latex needs it for index and other files
+            for (var i = 0; i < count; ++i) {
+                this.compile(texFile, destPdfFile);
+            }
         }
 
-        public void CompileInTemporaryDirectory(FileInfo texFile, FileInfo destPdfFile) {
+        public void CompileInTemporaryDirectory(FileInfo texFile, FileInfo destPdfFile, int count = 2) {
+            // by default compile twice (count=2), because latex needs it for index and other files
             try {
                 var tmpDir = IOExtension.CreateTempDirectory();
                 var texTmpFile = new FileInfo(Path.Combine(tmpDir.FullName, texFile.Name));
                 texFile.CopyTo(texTmpFile.FullName);
-                this.compile(texTmpFile, destPdfFile);
+                for (var i = 0; i < count; ++i) {
+                    this.compile(texTmpFile, destPdfFile);
+                }
                 tmpDir.Delete(true);
             } catch (Exception ex) {
                 if (ex is TexCompilationException)

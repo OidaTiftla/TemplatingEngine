@@ -6,11 +6,11 @@ namespace ExtensionMethods
 {
     public static class EnumerableExtension
     {
-        public static string Implode<T>(this IEnumerable<T> list, string sep, string praefix = "", string suffix = "", Func<T, string> toString = null)
+        public static string Implode<T>(this IEnumerable<T> list, string sep, string prefix = "", string suffix = "", Func<T, string>? toString = null)
         {
             var sb = new StringBuilder();
-            sb.Append(praefix);
-            string tmp = null;
+            sb.Append(prefix);
+            string? tmp = null;
             foreach (var i in list)
             {
                 if (tmp == null)
@@ -28,10 +28,10 @@ namespace ExtensionMethods
             return sb.ToString();
         }
 
-        private static string itemToString<T>(T item, Func<T, string> toString = null)
+        private static string itemToString<T>(T item, Func<T, string>? toString = null)
         {
             if (toString == null)
-                return item.ToString();
+                return item?.ToString() ?? "";
             else
                 return toString(item);
         }

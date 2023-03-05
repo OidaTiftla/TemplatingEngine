@@ -11,7 +11,7 @@ using System.Xml;
 namespace LatexScriptWrapper {
     public class TexConfig {
         #region properties
-        public string Command { get; set; }
+        public string? Command { get; set; }
         public List<string> Arguments { get; private set; }
         #endregion
 
@@ -27,15 +27,17 @@ namespace LatexScriptWrapper {
             try {
                 XmlDocument document = new XmlDocument();
                 document.Load(file.FullName);
-                XmlElement rootElement = document.DocumentElement;
-                XmlNodeList nodes = rootElement.ChildNodes;
-                foreach (XmlNode node in nodes) {
-                    if (node.Name.Equals("command"))
-                        this.Command = node.InnerText;
-                    else if (node.Name.Equals("arg")
-                        && node.Attributes.Count == 1
-                        && node.Attributes.Item(0).Name.Equals("value"))
-                        this.Arguments.Add(node.Attributes.Item(0).Value);
+                XmlElement? rootElement = document?.DocumentElement;
+                XmlNodeList? nodes = rootElement?.ChildNodes;
+                if (nodes is not null) {
+                    foreach (XmlNode node in nodes) {
+                        if (node.Name.Equals("command"))
+                            this.Command = node.InnerText;
+                        else if (node.Name.Equals("arg")
+                            && node.Attributes?.Count == 1
+                            && node.Attributes.Item(0)?.Name?.Equals("value") == true)
+                            this.Arguments.Add(node.Attributes.Item(0)?.Value ?? "");
+                    }
                 }
                 return true;
             } catch (Exception ex) {
@@ -72,11 +74,11 @@ namespace LatexScriptWrapper {
         public TexWrapper() {
             this.Configuration = new TexConfig();
             var exeDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var config = new FileInfo(Path.Combine(exeDir, "Configuration.xml"));
+            var config = new FileInfo(Path.Combine(exeDir ?? "", "Configuration.xml"));
             if (config.Exists)
                 this.Configuration.Load(config);
             else {
-                config = new FileInfo(Path.Combine(exeDir, "Config", "Configuration.xml"));
+                config = new FileInfo(Path.Combine(exeDir ?? "", "Config", "Configuration.xml"));
                 if (config.Exists)
                     this.Configuration.Load(config);
             }
@@ -86,7 +88,7 @@ namespace LatexScriptWrapper {
         #endregion
 
         #region compile
-        public void Compile(string tex, FileInfo destPdfFile, int count = 2) {
+        public void Compile(string tex, FileInfo? destPdfFile, int count = 2) {
             // by default compile twice (count=2), because latex needs it for index and other files
             try {
                 var tmpDir = IOExtension.CreateTempDirectory();
@@ -107,14 +109,14 @@ namespace LatexScriptWrapper {
             }
         }
 
-        public void Compile(FileInfo texFile, FileInfo destPdfFile, int count = 2) {
+        public void Compile(FileInfo texFile, FileInfo? destPdfFile, int count = 2) {
             // by default compile twice (count=2), because latex needs it for index and other files
             for (var i = 0; i < count; ++i) {
                 this.compile(texFile, destPdfFile);
             }
         }
 
-        public void CompileInTemporaryDirectory(FileInfo texFile, FileInfo destPdfFile, int count = 2) {
+        public void CompileInTemporaryDirectory(FileInfo texFile, FileInfo? destPdfFile, int count = 2) {
             // by default compile twice (count=2), because latex needs it for index and other files
             try {
                 var tmpDir = IOExtension.CreateTempDirectory();
@@ -133,16 +135,16 @@ namespace LatexScriptWrapper {
             }
         }
 
-        private void compile(FileInfo texFile, FileInfo destPdfFile) {
-            string cmdLine = null, workingDir = null;
+        private void compile(FileInfo texFile, FileInfo? destPdfFile) {
+            string? cmdLine = null, workingDir = null;
             var stdOutput = new StringBuilder();
-            var pdfFile = new FileInfo(Path.Combine(texFile.Directory.FullName, texFile.NameWithoutExtension() + ".pdf"));
-            var logFile = new FileInfo(Path.Combine(texFile.Directory.FullName, texFile.NameWithoutExtension() + ".log"));
+            var pdfFile = new FileInfo(Path.Combine(texFile.Directory?.FullName ?? "", texFile.NameWithoutExtension() + ".pdf"));
+            var logFile = new FileInfo(Path.Combine(texFile.Directory?.FullName ?? "", texFile.NameWithoutExtension() + ".log"));
             try {
                 if (File.Exists(pdfFile.FullName))
                     pdfFile.Delete();
                 var process = this.Configuration.CreateProcess(texFile);
-                workingDir = process.StartInfo.WorkingDirectory = texFile.Directory.FullName;
+                workingDir = process.StartInfo.WorkingDirectory = texFile.Directory?.FullName;
                 cmdLine = process.StartInfo.FileName + " " + process.StartInfo.Arguments;
                 // set up startinfo to redirect outputs
                 process.StartInfo.RedirectStandardOutput = true;
@@ -219,10 +221,12 @@ namespace LatexScriptWrapper {
         #region check config
         public bool CheckConfiguration() {
             try {
-                this.Compile(@"\documentclass{article}
-                \begin{document}
-                Hello World!
-                \end{document}", null);
+                this.Compile("""
+                    \documentclass{article}
+                    \begin{document}
+                    Hello World!
+                    \end{document}
+                    """, null);
                 return true;
             } catch { return false; }
         }

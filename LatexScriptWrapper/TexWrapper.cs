@@ -73,7 +73,7 @@ namespace LatexScriptWrapper {
         #region constructor
         public TexWrapper() {
             this.Configuration = new TexConfig();
-            var exeDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var exeDir = AppContext.BaseDirectory;
             var config = new FileInfo(Path.Combine(exeDir ?? "", "Configuration.xml"));
             if (config.Exists)
                 this.Configuration.Load(config);
